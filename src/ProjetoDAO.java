@@ -3,13 +3,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProjetoDAO {
+
     public void inserirProjeto(Projeto projeto) throws SQLException {
-        String sql = "INSERT INTO Projeto (Nome_Projeto, Local, Data_Inicio, Data_Termino) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Projeto (Nome_Projeto, Descricao) VALUES (?, ?)";
         try (Connection conn = ConexaoBD.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, projeto.getNomeProjeto());
-            stmt.setString(2, projeto.getLocal());
-            stmt.setDate(3, new java.sql.Date(projeto.getDataInicio().getTime()));
-            stmt.setDate(4, new java.sql.Date(projeto.getDataTermino().getTime()));
+            stmt.setString(2, projeto.getDescricao());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void atualizarProjeto(Projeto projeto) throws SQLException {
+        String sql = "UPDATE Projeto SET Nome_Projeto = ?, Descricao = ? WHERE ID_Projeto = ?";
+        try (Connection conn = ConexaoBD.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, projeto.getNomeProjeto());
+            stmt.setString(2, projeto.getDescricao());
+            stmt.setInt(3, projeto.getIdProjeto());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void excluirProjeto(int idProjeto) throws SQLException {
+        String sql = "DELETE FROM Projeto WHERE ID_Projeto = ?";
+        try (Connection conn = ConexaoBD.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idProjeto);
             stmt.executeUpdate();
         }
     }
@@ -19,17 +36,14 @@ public class ProjetoDAO {
         String sql = "SELECT * FROM Projeto";
         try (Connection conn = ConexaoBD.getConexao(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Projeto projeto = new Projeto();
-                projeto.setIdProjeto(rs.getInt("ID_Projeto"));
-                projeto.setNomeProjeto(rs.getString("Nome_Projeto"));
-                projeto.setLocal(rs.getString("Local"));
-                projeto.setDataInicio(rs.getDate("Data_Inicio"));
-                projeto.setDataTermino(rs.getDate("Data_Termino"));
+                Projeto projeto = new Projeto(
+                    rs.getInt("ID_Projeto"),
+                    rs.getString("Nome_Projeto"),
+                    rs.getString("Descricao")
+                );
                 projetos.add(projeto);
             }
         }
         return projetos;
     }
-
-    // Outros métodos CRUD para Projeto
 }
