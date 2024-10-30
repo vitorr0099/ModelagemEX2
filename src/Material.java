@@ -3,28 +3,21 @@ public class Material {
     private String nomeMaterial;
     private int quantidade;
 
-    // Getters e Setters
-    public int getIdMaterial() {
-        return idMaterial;
+    public Material(int idMaterial, String nomeMaterial, int quantidade) {
+        this.idMaterial = idMaterial;
+        this.nomeMaterial = nomeMaterial;
+        this.quantidade = quantidade;
     }
 
-    public void setIdMaterial(int idMaterial) {
-        this.idMaterial = idMaterial;
+    public int getIdMaterial() {
+        return idMaterial;
     }
 
     public String getNomeMaterial() {
         return nomeMaterial;
     }
 
-    public void setNomeMaterial(String nomeMaterial) {
-        this.nomeMaterial = nomeMaterial;
-    }
-
     public int getQuantidade() {
         return quantidade;
-    }
-
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
     }
 }
